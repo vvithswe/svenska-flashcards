@@ -1,14 +1,23 @@
+
 const { neon } = require('@neondatabase/serverless');
 
 exports.handler = async (event) => {
-  if (event.httpMethod !== 'GET') {
+  // Only allow POST requests
+  if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
+    const { name, level, correct, total } = JSON.parse(event.body);
+
+    // Basic validation
+    if (!name || !level || correct === undefined || !total) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Missing fields' }) };
+    }
+
     const sql = neon(process.env.NETLIFY_DATABASE_URL);
 
-    // Create table if it doesn't exist yet (safe to run every time)
+    // Create table if it doesn't exist yet
     await sql`
       CREATE TABLE IF NOT EXISTS scores (
         id        SERIAL PRIMARY KEY,
@@ -21,25 +30,24 @@ exports.handler = async (event) => {
       )
     `;
 
-    // Get top 50 scores, sorted by percentage then by correct count
-    const rows = await sql`
-      SELECT name, level, correct, total, pct, played_at
-      FROM scores
-      ORDER BY pct DESC, correct DESC, played_at DESC
-      LIMIT 50
+    const pct = Math.round((correct / total) * 100);
+
+    await sql`
+      INSERT INTO scores (name, level, correct, total, pct)
+      VALUES (${name}, ${level}, ${correct}, ${total}, ${pct})
     `;
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(rows)
+      body: JSON.stringify({ success: true })
     };
 
   } catch (err) {
-    console.error('get-scores error:', err);
+    console.error('save-score error:', err);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to load scores' })
+      body: JSON.stringify({ error: 'Failed to save score' })
     };
   }
 };
