@@ -1,3 +1,25 @@
+I've been learning Swedish and struggling to memorise vocabulary — so I built something to help.
+
+Svenska Flashcards is a free web app based on the Kelly List, a research-backed frequency list of the 8,425 most important Swedish words ranked by how often they appear in real everyday language. The app covers all CEFR levels from A1 (beginner) to C2 (mastery), shows 25 words per session, and remembers which words you're still learning so they come back more often.
+
+It also has a live leaderboard so you can compete with friends.
+
+🔗 svenska-flashcards.netlify.app
+
+What I learned building this:
+— How to set up a GitHub repository and auto-deploy pipeline
+— How serverless functions work
+— How to connect a live PostgreSQL database
+— That building something for yourself is the best way to learn
+
+Built with the help of Claude (Anthropic) as both a coding partner and a learning tool.
+
+Sources and credits:
+📚 Kelly List — Språkbanken Text, University of Gothenburg (CC-BY-4.0)
+📖 Translations — Folkets Lexikon, KTH Royal Institute of Technology (CC-BY-SA-2.5)
+
+If you're learning Swedish — or any language — I hope this helps. And if you're curious about building something with AI assistance, happy to share more about the process.
+
 # Svenska Flashcards — Project Roadmap
 
 A Swedish vocabulary flashcard web app based on the Kelly List (8,425 words, CEFR A1–C2).
